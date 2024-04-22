@@ -281,7 +281,10 @@ NSString *const LLSimpleCameraErrorDomain = @"LLSimpleCameraErrorDomain";
         [self.captureVideoPreviewLayer.connection setEnabled:YES];
     }
     
-    [self.session startRunning];
+    // Execute the [self.session startRunning] call on a background thread, preventing it from blocking the main thread
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self.session startRunning];
+    });
 }
 
 - (void)stop
